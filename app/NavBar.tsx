@@ -19,7 +19,7 @@ export default function NavBar() {
 
       <ul className="flex space-x-5">
         {links.map(link => (
-          <li><Link className={classNames({
+          <li key={link.href}><Link className={classNames({
             "hover:text-zinc-500": true,
             "transition-colors": true,
             "text-zinc-500": pathnames === link.href && true
