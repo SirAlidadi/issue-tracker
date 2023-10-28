@@ -1,14 +1,26 @@
 "use client"
 
 import { useState } from "react";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
-import { useForm, Controller } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import Spinner from "@/components/Spinner";
-import SimpleMDE from "react-simplemde-editor";
-import CreateIssueSchema, { CreateIssueForm } from "@/schema/CreateIssueSchema";
 import axios from "axios";
+
+import CreateIssueSchema, { CreateIssueForm } from "@/schema/CreateIssueSchema";
+import SimpleMDE from "react-simplemde-editor";
+import Spinner from "@/components/Spinner";
 
 import "easymde/dist/easymde.min.css";
 
@@ -18,12 +30,7 @@ export default function NewIssuePage() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<CreateIssueForm>({
+  const form = useForm<CreateIssueForm>({
     resolver: zodResolver(CreateIssueSchema),
   });
 
@@ -39,29 +46,46 @@ export default function NewIssuePage() {
   }
 
   return (
-    <form className="max-w-xl space-y-2" onSubmit={handleSubmit(data => onHandleSubmit(data))}>
-      {error &&
-        <Callout.Root color="red" role="alert">
-          <Callout.Text>
-            { error }
-          </Callout.Text>
-        </Callout.Root>
-      }
-      <TextField.Root>
-        <TextField.Input placeholder="Title" {...register('title')} />
-      </TextField.Root>
-      {errors.title?.message && <Text color="red" as="p">{errors.title?.message}</Text>}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onHandleSubmit)} className="space-y-5 max-w-xl">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Title" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your title for issue.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Controller
-        name="description"
-        control={control}    
-        render={({field}) => <SimpleMDE placeholder="Description" {...field}/>}
-      />
-      {errors.description?.message && <Text color="red" as="p">{errors.description?.message}</Text>}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <SimpleMDE placeholder="Description" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your description for issue.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button className="w-full" disabled={loading}>
-        Submit New Issue { loading && <Spinner /> }
-      </Button>
-    </form>
+        <Button type="submit" className="w-full" disabled={loading}>
+          Submit &nbsp;{loading && <Spinner />}
+        </Button>
+      </form>
+    </Form>
   )
 }
