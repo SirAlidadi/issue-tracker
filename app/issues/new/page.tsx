@@ -26,7 +26,6 @@ import "easymde/dist/easymde.min.css";
 
 
 export default function NewIssuePage() {
-  const [error, setError] = useState<String>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -41,7 +40,6 @@ export default function NewIssuePage() {
       router.push("/issues");
     } catch (error) {
       setLoading(false);
-      setError("An unexpected error occurred.")
     }
   }
 

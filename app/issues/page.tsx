@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -10,6 +9,8 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import prisma from "@/prisma/client";
+import Badge from "@/components/Badge";
+import Navigation from "./Navigation";
 
 
 export default async function IssuePage() {
@@ -31,15 +32,13 @@ export default async function IssuePage() {
             <TableRow key={issue.id}>
               <TableCell>{issue.id}</TableCell>
               <TableCell>{issue.title}</TableCell>
-              <TableCell>{issue.status}</TableCell>
+              <TableCell><Badge status={issue.status} /></TableCell>
               <TableCell>{issue.createdAt.toDateString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Button className="w-full mt-4">
-        <Link href="/issues/new">New Issue</Link>
-      </Button>
+      <Navigation />
     </div>
   )
 }
