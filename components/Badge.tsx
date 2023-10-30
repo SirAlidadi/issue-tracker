@@ -8,6 +8,9 @@ const statusMap: Record<Status, {label: string, color: string}> = {
   CLOSED: {label: "Closed", color: "bg-green-500"}
 }
 
-export default function Badge({ status }: {status: Status}) {
+export default function Badge({ status }: {status: Status | undefined}) {
+  if(status === undefined) {
+    throw Error("you must be send status for badge component.")
+  }
   return <PureBadge className={statusMap[status].color} variant="outline">{statusMap[status].label}</PureBadge>
 }

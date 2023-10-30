@@ -31,7 +31,7 @@ export default async function IssuePage() {
           {issues.map((issue) => (
             <TableRow key={issue.id}>
               <TableCell>{issue.id}</TableCell>
-              <TableCell>{issue.title}</TableCell>
+              <TableCell><Link href={`/issues/${issue.id}`} className="text-violet-500 hover:underline">{issue.title}</Link></TableCell>
               <TableCell><Badge status={issue.status} /></TableCell>
               <TableCell>{issue.createdAt.toDateString()}</TableCell>
             </TableRow>
